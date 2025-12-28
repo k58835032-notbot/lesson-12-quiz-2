@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japanese Particle Game – Set 2</title>
+
+<style>
+body{
+  font-family:"Hiragino Kaku Gothic Pro","Meiryo",sans-serif;
+  background:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:40px;
+}
+h1{color:#b23b3b;}
+
+#quiz-container{
+  background:#fff;
+  border-radius:15px;
+  box-shadow:0 4px 12px rgba(0,0,0,.15);
+  padding:30px;
+  width:90%;
+  max-width:650px;
+  text-align:center;
+}
+
+.sentence{
+  font-size:2em;
+  margin-bottom:20px;
+  line-height:1.6;
+}
+
+.word{
+  display:inline-block;
+  text-align:center;
+  margin:0 6px;
+}
+
+.word .meaning{
+  display:block;
+  font-size:.45em;
+  color:#777;
+}
+
+.blank{
+  font-weight:bold;
+  font-size:1.2em;
+}
+
+.option{
+  display:block;
+  background:#ffeaea;
+  border:none;
+  border-radius:10px;
+  padding:12px;
+  font-size:1.1em;
+  width:100%;
+  max-width:320px;
+  margin:10px auto;
+  cursor:pointer;
+}
+.option:hover{background:#f7b6b6;}
+
+#next{
+  display:none;
+  margin-top:20px;
+  background:#b23b3b;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  padding:10px 20px;
+  cursor:pointer;
+}
+
+#message{margin-top:10px;font-size:1.2em;}
+#q-num{margin-bottom:10px;color:#666;}
+</style>
+</head>
+
+<body>
+<h1>Japanese Particles Quiz – Set 2</h1>
+
+<div id="quiz-container">
+  <div id="q-num"></div>
+  <div class="sentence" id="sentence"></div>
+  <div id="options"></div>
+  <div id="message"></div>
+  <button id="next">Next</button>
+</div>
+
+<script>
+const questions = [
+
+/* Q1 */
+{
+  sentence:[
+    ["みず","water"],
+    ["＿",""],
+    ["のむ","drink"]
+  ],
+  options:["を (o)","を (wo)","を (wa)"],
+  correct:"を (o)"
+},
+
+/* Q2 */
+{
+  sentence:[
+    ["かのじょ","she"],
+    ["＿",""],
+    ["みず","water"],
+    ["＿",""],
+    ["のむ","drink"]
+  ],
+  options:[
+    "は (ha) ・ を (o)",
+    "を (o) ・ は (ha)",
+    "は (wa) ・ を (o)"
+  ],
+  correct:"は (wa) ・ を (o)"
+},
+
+/* Q3 */
+{
+  sentence:[
+    ["わたし","I"],
+    ["＿",""],
+    ["わがし","Japanese sweets"],
+    ["＿",""],
+    ["かう","buy"]
+  ],
+  options:[
+    "は (wa) ・ を (o)",
+    "は (wa) ・ へ (he)",
+    "は (wa) ・ は (ha)"
+  ],
+  correct:"は (wa) ・ を (o)"
+},
+
+/* Q4 */
+{
+  sentence:[
+    ["＿たし","I"],
+    ["＿",""],
+    ["＿がし","sweets"],
+    ["＿",""],
+    ["かう","buy"]
+  ],
+  options:[
+    "わ (wa) ・ わ (wa) ・ わ (wa) ・ を (wo)",
+    "わ (wa) ・ は (wa) ・ わ (wa) ・ を (o)",
+    "は (ha) ・ は (wa) ・ は (ha) ・ へ (he)"
+  ],
+  correct:"わ (wa) ・ は (wa) ・ わ (wa) ・ を (o)"
+},
+
+/* Q5 */
+{
+  sentence:[
+    ["＿たし","I"],
+    ["＿",""],
+    ["しごと","work"],
+    ["＿",""],
+    ["する","do"]
+  ],
+  options:[
+    "わ (wa) ・ は (wa) ・ を (wo)",
+    "は (ha) ・ は (ha) ・ を (o)",
+    "わ (wa) ・ は (wa) ・ を (o)"
+  ],
+  correct:"わ (wa) ・ は (wa) ・ を (o)"
+},
+
+/* Q6 */
+{
+  sentence:[
+    ["でんしゃ","train"],
+    ["＿",""],
+    ["とうきょう","Tokyo"],
+    ["＿",""],
+    ["いく","go"]
+  ],
+  options:[
+    "は (wa) ・ へ (e)",
+    "は (ha) ・ を (o)",
+    "は (wa) ・ は (wo)"
+  ],
+  correct:"は (wa) ・ へ (e)"
+},
+
+/* Q7 */
+{
+  sentence:[
+    ["でんしゃ","train"],
+    ["＿",""],
+    ["＿＿＿","Tokyo"],
+    ["＿",""],
+    ["いく","go"]
+  ],
+  options:[
+    "は (wa) ・ とう (to) ・ きょう (kyū) ・ へ (e)",
+    "は (wa) ・ とう (tō) ・ きょう (kyou) ・ へ (e)",
+    "は (wa) ・ とう (tō) ・ きょう (kyō) ・ へ (e)"
+  ],
+  correct:"は (wa) ・ とう (tō) ・ きょう (kyō) ・ へ (e)"
+},
+
+/* Q8 */
+{
+  sentence:[
+    ["かれ","he"],
+    ["＿",""],
+    ["おんがく","music"],
+    ["＿",""],
+    ["きく","listen"]
+  ],
+  options:[
+    "は (wa) ・ を (o)",
+    "わ (wa) ・ を (o)",
+    "は (wa) ・ わ (o)"
+  ],
+  correct:"は (wa) ・ を (o)"
+},
+
+/* Q9 */
+{
+  sentence:[
+    ["かれ","he"],
+    ["＿",""],
+    ["＿んがく","music"],
+    ["＿",""],
+    ["きく","listen"]
+  ],
+  options:[
+    "は (wa) ・ お (o) ・ を (o)",
+    "は (wa) ・ を (o) ・ を (o)",
+    "は (wa) ・ お (o) ・ お (o)"
+  ],
+  correct:"は (wa) ・ お (o) ・ を (o)"
+},
+
+/* Q10 */
+{
+  sentence:[
+    ["＿たし","I"],
+    ["＿",""],
+    ["＿や","room"],
+    ["＿",""],
+    ["もどる","return"]
+  ],
+  options:[
+    "わ (wa) ・ わ (wa) ・ へ (he) ・ へ (e)",
+    "わ (wa) ・ わ (wa) ・ え (e) ・ へ (he)",
+    "わ (wa) ・ は (wa) ・ へ (he) ・ へ (e)"
+  ],
+  correct:"わ (wa) ・ は (wa) ・ へ (he) ・ へ (e)"
+},
+  
+/* Q11 */
+{
+  sentence:[
+    ["＿なび","firework"],
+    ["＿",""],
+    ["みる","watch"]
+  ],
+  options:[
+    "は (ha) ・ を (o)",
+    "は (wa) ・ は (ha)",
+    "を (o) ・ は (wa)"
+  ],
+  correct:"は (ha) ・ を (o)"
+},
+
+/* Q12 */
+{
+  sentence:[
+    ["がくせい","student"],
+    ["＿",""],
+    ["だいがく","university"],
+    ["＿",""],
+    ["いく","go"]
+  ],
+  options:[
+    "は (wa) ・ へ (e)",
+    "を (wa) ・ は (o)",
+    "を (o) ・ へ (he)"
+  ],
+  correct:"は (wa) ・ へ (e)"
+},
+
+/* Q13 */
+{
+  sentence:[
+    ["かのじょ","she"],
+    ["＿",""],
+    ["いき＿な","ikebana"],
+    ["＿",""],
+    ["つくる","make"]
+  ],
+  options:[
+    "は (wa) ・ は (wa) ・ を (o)",
+    "は (wa) ・ ば (ha) ・ を (o)",
+    "は (wa) ・ ば (ba) ・ を (o)"
+  ],
+  correct:"は (wa) ・ ば (ba) ・ を (o)"
+},
+
+/* Q14 */
+{
+  sentence:[
+    ["わたし","I"],
+    ["＿",""],
+    ["＿ち","road"],
+    ["＿",""],
+    ["あるく","walk"]
+  ],
+  options:[
+    "は (wa) ・ み (ma) ・ を (o)",
+    "は (wa) ・ み (mi) ・ を (o)",
+    "は (ha) ・ み (ni) ・ を (o)"
+  ],
+  correct:"は (wa) ・ み (mi) ・ を (o)"
+},
+
+/* Q15 */
+{
+  sentence:[
+    ["＿やく","quickly"],
+    ["い＿","home"],
+    ["＿",""],
+    ["か＿る","return"]
+  ],
+  options:[
+    "は (ha) ・ え (e) ・ へ (e) ・ え (e)",
+    "は (ha) ・ へ (e) ・ へ (e) ・ へ (e)",
+    "わ (wa) ・ へ (he) ・ え (e) ・ へ (e)"
+  ],
+  correct: "は (ha) ・ え (e) ・ へ (e) ・ え (e)"
+},
+
+/* Q16 */
+{
+  sentence:[
+    ["ともだち","friend"],
+    ["＿",""],
+    ["もつ","have"]
+  ],
+  options:[
+    "ば (wa)",
+    "を (o)",
+    "お (o)"
+  ],
+  correct:"を (o)"
+},
+
+/* Q17 */
+{
+  sentence:[
+    ["こども","children"],
+    ["＿",""],
+    ["＿＿","mother"],
+    ["＿","to"],
+    ["＿しる","run"]
+  ],
+  options:[
+    "は (wa) ・ は (ha) ・ は (ha) ・ へ (e) ・ は (ha)",
+    "は (wa) ・ は (ha) ・ は (ha) ・ は (wa) ・ は (wa)",
+    "は (wa) ・ は (ha) ・ は (ha) ・ お (o) ・ を (o)"
+  ],
+  correct: "は (wa) ・ は (ha) ・ は (ha) ・ へ (e) ・ は (ha)"
+},
+
+/* Q18 */
+{
+  sentence:[
+    ["かれ","he"],
+    ["＿",""],
+    ["にほんご","Japanese"],
+    ["＿",""],
+    ["べんきょう","study"],
+    ["する","do"]
+  ],
+  options:[
+    "ぱ (wa) ・ を (o)",
+    "は (wa) ・ を (o)",
+    "へ (e) ・ お (o)"
+  ],
+  correct:"は (wa) ・ を (o)"
+},
+
+/* Q19 */
+{
+  sentence:[
+    ["かれ","he"],
+    ["＿",""],
+    ["にほんご","Japanese"],
+    ["＿",""],
+    ["＿ん＿＿＿","study"],
+    ["する","do"]
+  ],
+  options:[
+    "は (wa) ・ を (o) ・ べ (be) ・ きょう (kyō)",
+    "は (wa) ・ を (o) ・ へ (be) ・ きょう (kyō)",
+    "は (wa) ・ を (o) ・ へ (e) ・ きょう (kyō)"
+  ],
+  correct:"は (wa) ・ を (o) ・ べ (be) ・ きょう (kyō)"
+},
+
+/* Q20 */
+{
+  sentence:[
+    ["＿かい","young"],
+    ["ひと","person"],
+    ["＿",""],
+    ["やま","mountain"],
+    ["＿",""],
+    ["のぼる","climb"]
+  ],
+  options:[
+    "わ (wa) ・ へ (he) ・ は (wa)",
+    "わ (wa) ・ は (wa) ・ へ (e)",
+    "ね (wa) ・ は (wa) ・ を (o)"
+  ],
+  correct:"わ (wa) ・ は (wa) ・ へ (e)"
+},
+
+/* Q21 */
+{
+  sentence:[
+    ["＿っ＿","leaf"],
+    ["が","subject"],
+    ["＿ちる","fall"]
+  ],
+  options:[
+    "は (ha) ・ ぱ (wa) ・ を (o)",
+    "は (ha) ・ ぱ (pa) ・ お (o)",
+    "わ (wa) ・ ぱ (pa) ・ を (o)"
+  ],
+  correct:"は (ha) ・ ぱ (pa) ・ お (o)"
+},
+
+/* Q22 */
+{
+  sentence:[
+    ["きぶん","feeling"],
+    ["が","subject"],
+    ["＿るい","bad"]
+  ],
+  options:[
+    "ぱ (wa)",
+    "わ (wa)",
+    "は (wa)"
+  ],
+  correct:"わ (wa)"
+},
+
+/* Q23 */
+{
+  sentence:[
+    ["＿たし","I"],
+    ["は","topic"],
+    ["＿っ＿","leaf"],
+    ["を","object"],
+    ["みる","see"]
+  ],
+  options:[
+    "わ (wa) ・ は (ha) ・ ぱ (pa)",
+    "は (ha) ・ は (wa) ・ ぱ (pa)",
+    "わ (wa) ・ は (ha) ・ ぱ (pa)"
+  ],
+  correct:"わ (wa) ・ は (ha) ・ ぱ (pa)"
+},
+
+/* Q24 */
+{
+  sentence:[
+    ["＿たし","I"],
+    ["＿",""],
+    ["＿っ＿","leaf"],
+    ["＿",""],
+    ["みる","see"]
+  ],
+  options:[
+    "わ (wa) ・ は (wa) ・ は (wa) ・ ぱ (pa) ・ を (o)",
+    "わ (wa) ・ は (wa) ・ は (ha) ・ ぱ (pa) ・ を (o)",
+    "わ (wa) ・ わ (wa) ・ は (ha) ・ ぱ (pa) ・ を (o)"
+  ],
+  correct:"わ (wa) ・ は (wa) ・ は (ha) ・ ぱ (pa) ・ を (o)"
+},
+
+/* Q25 */
+{
+  sentence:[
+    ["＿＿ろい","yellow"],
+    ["はっぱ","leaf"],
+    ["＿",""],
+    ["あつめた","collected"]
+  ],
+  options:[
+    "きい (kī) ・ を (o)",
+    "きい (ki) ・ を (o)",
+    "きい (kī) ・ お (o)"
+  ],
+  correct:"きい (kī) ・ を (o)"
+},
+
+/* Q26 */
+{
+  sentence:[
+    ["あき","autumn"],
+    ["の","of"],
+    ["はっぱ","leaf"],
+    ["＿",""],
+    ["＿＿ろい","yellow"],
+    ["だ","is"]
+  ],
+  options:[
+    "は (wa) ・ きい (kī)",
+    "を (o) ・ きい (sai)",
+    "へ (he) ・ きい (kī)"
+  ],
+  correct:"は (wa) ・ きい (kī)"
+},
+
+/* Q27 */
+{
+  sentence:[
+    ["いしゃ","doctor"],
+    ["＿",""],
+    ["みせ","shop"],
+    ["に","at"],
+    ["＿いる","be"]
+  ],
+  options:[
+    "は (wa) ・ は (ha)",
+    "は (wa) ・ は (wa)",
+    "は (ha) ・ は (ha)"
+  ],
+  correct:"は (wa) ・ は (ha)"
+},
+
+/* Q28 */
+{
+  sentence:[
+    ["＿しゃ","doctor"],
+    ["は","topic"],
+    ["みせ","shop"],
+    ["＿",""],
+    ["いく","go"]
+  ],
+  options:[
+    "に (i) ・ へ (e)",
+    "い (i) ・ へ (e)",
+    "け (i) ・ へ (he)"
+  ],
+  correct:"い (i) ・ へ (e)"
+},
+
+/* Q29 */
+{
+  sentence:[
+    ["みせ","shop"],
+    ["＿",""],
+    ["あた＿しい","new"]
+  ],
+  options:[
+    "は (ha) ・ ら (ra)",
+    "は (ha) ・ ら (wa)",
+    "は (wa) ・ ら (ra)"
+  ],
+  correct:"は (wa) ・ ら (ra)"
+},
+
+/* Q30 */
+{
+  sentence:[
+    ["みせ","shop"],
+    ["は","topic"],
+    ["あたら＿＿","new"]
+  ],
+  options:[
+    "いい (shī)",
+    "しい (shī)",
+    "しい (ī)"
+  ],
+  correct:"しい (shī)"
+},
+
+/* Q31 */
+{
+  sentence:[
+    ["わたし","I"],
+    ["＿",""],
+    ["がっこう","school"],
+    ["＿",""],
+    ["ほん","book"],
+    ["＿",""],
+    ["もって","carry"],
+    ["いく","go"]
+  ],
+  options:[
+    "は (wa) ・ へ (e) ・ を (o)",
+    "へ (he) ・ は (wa) ・ を (o)",
+    "を (o) ・ へ (he) ・ は (wa)"
+  ],
+  correct:"は (wa) ・ へ (e) ・ を (o)"
+},
+
+/* Q32 */
+{
+  sentence:[
+    ["＿たし","I"],
+    ["は","topic"],
+    ["が＿＿＿","school"],
+    ["へ","to"],
+    ["＿ん","book"],
+    ["を","object"],
+    ["も＿＿","carry"],
+    ["いく","go"]
+  ],
+  options:[
+    "わ (wa) ・ っこう (kkō) ・ ほ (ha) ・ って (tte)",
+    "わ (wa) ・ っこう (kkō) ・ ほ (ho) ・ って (tte)",
+    "わ (wa) ・ っこう (kō) ・ ほ (ho) ・ って (tte)"
+  ],
+  correct:"わ (wa) ・ っこう (kkō) ・ ほ (ho) ・ って (tte)"
+},
+
+/* Q33 */
+{
+  sentence:[
+    ["がく＿＿","student"],
+    ["が","subject"],
+    ["＿＿＿しつ","classroom"],
+    ["＿",""],
+    ["きた","came"]
+  ],
+  options:[
+    "せい (sē) ・ きょう (kyō) ・ へ (e)",
+    "せい (sei) ・ きょう (kyō) ・ え (e)",
+    "せい (sē) ・ きゅう (kyō) ・ へ (he)"
+  ],
+  correct:"せい (sē) ・ きょう (kyō) ・ へ (e)"
+},
+  
+/* Q34 */
+{
+  sentence:[
+    ["＿たし","I"],
+    ["＿",""],
+    ["＿ん","book"],
+    ["が","subject"],
+    ["すき","like"]
+  ],
+  options:[
+    "わ (wa) ・ は (wa) ・ ほ (ho)",
+    "は (ha) ・ は (wa) ・ ほ (ho)",
+    "わ (wa) ・ は (wa) ・ ほ (ha)"
+  ],
+  correct:"わ (wa) ・ は (wa) ・ ほ (ho)"
+},
+
+/* Q36 */
+{
+  sentence:[
+    ["わたし","I"],
+    ["＿",""],
+    ["わるい","bad"],
+    ["＿し","bridge"],
+    ["＿",""],
+    ["わたった","crossed"]
+  ],
+  options:[
+    "は (wa) ・ は (ha) ・ を (o)",
+    "わ (wa) ・ は (ha) ・ を (o)",
+    "は (ha) ・ は (wa) ・ を (o)"
+  ],
+  correct:"は (wa) ・ は (ha) ・ を (o)"
+},
+
+  
+/* Q35 */
+{
+  sentence:[
+    ["＿たし","I"],
+    ["＿",""],
+    ["＿るい","bad"],
+    ["＿し","bridge"],
+    ["＿",""],
+    ["＿たった","crossed"]
+  ],
+  options:[
+    "わ (wa) ・ は (wa) ・ わ (wa) ・ は (ha) ・ を (o) ・ わ (wa)",
+    "わ (wa) ・ は (wa) ・ わ (ha) ・ は (ha) ・ を (o) ・ わ (wa)",
+    "は (ha) ・ は (wa) ・ わ (wa) ・ は (ha) ・ を (o) ・ わ (wa)"
+  ],
+  correct:"わ (wa) ・ は (wa) ・ わ (wa) ・ は (ha) ・ を (o) ・ わ (wa)"
+},
+  
+/* Q37 */
+{
+  sentence:[
+    ["いぬ","dog"],
+    ["は","topic"],
+    ["＿さ","dog food"],
+    ["＿",""],
+    ["た＿る","eat"]
+  ],
+  options:[
+    "え (e) ・ を (o) ・ へ (e)",
+    "え (e) ・ を (o) ・ べ (be)",
+    "へ (e) ・ を (o) ・ べ (he)"
+  ],
+  correct:"え (e) ・ を (o) ・ べ (be)"
+},
+
+/* Q38 */
+{
+  sentence:[
+    ["かしゅ","singer"],
+    ["＿",""],
+    ["うた","song"],
+    ["＿",""],
+    ["うたう","sing"]
+  ],
+  options:[
+    "は (wa) ・ を (o)",
+    "わ (wa) ・ は (ha)",
+    "を (o) ・ は (ha)"
+  ],
+  correct:"は (wa) ・ を (o)"
+},
+
+/* Q39 */
+{
+  sentence:[
+    ["か＿＿","singer"],
+    ["＿",""],
+    ["うた","song"],
+    ["＿",""],
+    ["う＿＿","sang"]
+  ],
+  options:[
+    "しゅ (shu) ・ は (wa) ・ を (o) ・ った (tta)",
+    "しゅ (shu) ・ わ (wa) ・ を (o) ・ った (tta)",
+    "しゅう (shu) ・ は (wa) ・ を (o) ・ った (tta)"
+  ],
+  correct:"しゅ (shu) ・ は (wa) ・ を (o) ・ った (tta)"
+},
+
+/* Q40 */
+{
+  sentence:[
+    ["お＿＿さん","older brother"],
+    ["＿",""],
+    ["かいしゃ","company"],
+    ["で","at"],
+    ["はたらく","work"]
+  ],
+  options:[
+    "にい (nī) ・ は (wa)",
+    "いい (nī) ・ は (wa)",
+    "にい (ni) ・ は (ha)"
+  ],
+  correct:"にい (nī) ・ は (wa)"
+},
+
+/* Q41 */
+{
+  sentence:[
+    ["おにいさん","older brother"],
+    ["＿",""],
+    ["かい＿＿","company"],
+    ["で","at"],
+    ["＿たらく","work"]
+  ],
+  options:[
+    "わ (wa) ・ しゃ (shya) ・ わ (wa)",
+    "は (wa) ・ しゃ (shya) ・ は (ha)",
+    "は (wa) ・ しゃ (shya) ・ は (wa)"
+  ],
+  correct:"は (wa) ・ しゃ (shya) ・ は (ha)"
+},
+
+/* Q42 */
+{
+  sentence:[
+    ["いもうと","younger sister"],
+    ["＿",""],
+    ["やさい","vegetables"],
+    ["＿",""],
+    ["かった","bought"]
+  ],
+  options:[
+    "は (wa) ・ を (o)",
+    "わ (wa) ・ は (ha)",
+    "を (o) ・ は (wa)"
+  ],
+  correct:"は (wa) ・ を (o)"
+},
+
+/* Q43 */
+{
+  sentence:[
+    ["い＿＿と","younger sister"],
+    ["＿",""],
+    ["やさい","vegetables"],
+    ["＿",""],
+    ["か＿＿","bought"]
+  ],
+  options:[
+    "もう (mou) ・ は (wa) ・ を (o) ・ った (tta)",
+    "もう (mō) ・ は (wa) ・ を (o) ・ った (ta)",
+    "もう (mō) ・ は (wa) ・ を (o) ・ った (tta)"
+  ],
+  correct:"もう (mō) ・ は (wa) ・ を (o) ・ った (tta)"
+},
+
+/* Q44 */
+{
+  sentence:[
+    ["きょうと","Kyoto"],
+    ["＿",""],
+    ["りょこう！","trip!"],
+    ["＿く＿く","excited"],
+    ["します！","do!"]
+  ],
+  options:[
+    "へ (e) ・ わ (wa) ・ わ (wa)",
+    "え (e) ・ は (ha) ・ は (ha)",
+    "へ (e) ・ は (wa) ・ は (wa)"
+  ],
+  correct:"へ (e) ・ わ (wa) ・ わ (wa)"
+},
+
+/* Q45 */
+{
+  sentence:[
+    ["＿たし","I"],
+    ["＿",""],
+    ["＿しょく","Japanese-style meal"],
+    ["に","for"],
+    ["します","will do"]
+  ],
+  options:[
+    "わ (wa) ・ は (wa) ・ わ (wa)",
+    "は (wa) ・ は (wa) ・ は (wa)",
+    "は (ha) ・ は (ha) ・ は (ha)"
+  ],
+  correct:"わ (wa) ・ は (wa) ・ わ (wa)"
+},
+
+/* Q46 */
+{
+  sentence:[
+    ["＿らえる！","can get!"]
+  ],
+  options:[
+    "わ (wa)",
+    "は (wa)",
+    "を (o)"
+  ],
+  correct:"わ (wa)"
+},
+
+/* Q47 */
+{
+  sentence:[
+    ["＿たし","I"],
+    ["＿",""],
+    ["きみ","you"],
+    ["の","of"],
+    ["＿にいさん","older brother"],
+    ["＿",""],
+    ["よく","well"],
+    ["しっている","know"]
+  ],
+  options:[
+    "わ (wa) ・ は (wa) ・ お (o) ・ を (o)",
+    "わ (wa) ・ は (wa) ・ を (o) ・ を (o)",
+    "は (wa) ・ は (wa) ・ を (o) ・ お (o)"
+  ],
+  correct:"わ (wa) ・ は (wa) ・ お (o) ・ を (o)"
+},
+
+/* Q48 */
+{
+  sentence:[
+    ["＿か＿","money"],
+    ["＿",""],
+    ["ない！","not there!"],
+    ["＿るい","bad"]
+  ],
+  options:[
+    "お (o) ・ ね (ne) ・ は (wa) ・ わ (wa)",
+    "お (o) ・ ね (wa) ・ は (wa) ・ わ (wa)",
+    "を (o) ・ ね (wa) ・ は (wa) ・ わ (wa)"
+  ],
+  correct:"お (o) ・ ね (ne) ・ は (wa) ・ わ (wa)"
+},
+
+/* Q49 */
+{
+  sentence:[
+    ["＿＿＿ちゃん","sis"],
+    ["いきましょう！","let’s go!"]
+  ],
+  options:[
+    "お (o) ・ ねえ (nē)",
+    "お (o) ・ ね (wa) ・ え (e)",
+    "お (o) ・ わへ (nē)"
+  ],
+  correct:"お (o) ・ ねえ (nē)"
+},
+
+/* Q50 */
+{
+  sentence:[
+    ["＿ま＿","you"],
+    ["だまれ！","shut up!"]
+  ],
+  options:[
+    "お (o) ・ え (e)",
+    "を (o) ・ へ (he)",
+    "お (o) ・ へ (e)"
+  ],
+  correct:"お (o) ・ え (e)"
+}
+
+
+
+];
+
+let i = 0;
+
+const sEl = document.getElementById("sentence");
+const oEl = document.getElementById("options");
+const mEl = document.getElementById("message");
+const nEl = document.getElementById("next");
+const qNum = document.getElementById("q-num");
+
+function render(){
+  sEl.innerHTML="";
+  oEl.innerHTML="";
+  mEl.textContent="";
+  nEl.style.display="none";
+  qNum.textContent = `Question ${i+1} / ${questions.length}`;
+
+  questions[i].sentence.forEach(w=>{
+    const span=document.createElement("span");
+    span.className="word";
+    span.innerHTML=`<span class="meaning">${w[1]}</span>
+                   <span class="${w[0]==='＿'?'blank':''}">${w[0]}</span>`;
+    sEl.appendChild(span);
+  });
+
+  questions[i].options.forEach(opt=>{
+    const b=document.createElement("button");
+    b.className="option";
+    b.textContent=opt;
+    b.onclick=()=>check(opt);
+    oEl.appendChild(b);
+  });
+}
+
+function check(choice){
+  document.querySelectorAll(".option").forEach(b=>b.disabled=true);
+  if(choice===questions[i].correct){
+    mEl.textContent="✅ Correct!";
+  }else{
+    mEl.textContent=`❌ Correct answer: ${questions[i].correct}`;
+  }
+  nEl.style.display="inline-block";
+}
+
+nEl.onclick=()=>{
+  i++;
+  if(i<questions.length){
+    render();
+  }else{
+    sEl.innerHTML="🎉 You did it! 😺✨";
+    oEl.innerHTML="";
+    qNum.textContent="";
+    mEl.textContent="Great job! Keep practicing 💪";
+    nEl.style.display="none";
+  }
+};
+
+render();
+</script>
+</body>
+</html>
