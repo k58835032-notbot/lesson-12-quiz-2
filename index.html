@@ -76,6 +76,17 @@ h1{color:#b23b3b;}
 
 #message{margin-top:10px;font-size:1.2em;}
 #q-num{margin-bottom:10px;color:#666;}
+#end-screen{
+  text-align:center;
+}
+
+#end-screen img{
+  max-width:240px;
+  margin:20px auto;
+  display:block;
+}
+
+  
 </style>
 </head>
 
@@ -978,16 +989,25 @@ nEl.onclick=()=>{
   i++;
   if(i<questions.length){
     render();
-  }else{
-    sEl.innerHTML="🎉 You did it! 😺✨";
-    oEl.innerHTML="";
-    qNum.textContent="";
-    mEl.textContent="Great job! Keep practicing 💪";
-    nEl.style.display="none";
-  }
+ }else{
+  qNum.textContent="";
+  nEl.style.display="none";
+
+  sEl.innerHTML = `
+    <div id="end-screen">
+      <h2>🎉 You did it! 😺✨</h2>
+      <img src="https://raw.githubusercontent.com/k58835032-notbot/lesson-12-quiz-2/main/tumblr_nw6rdeAO5i1twn3nro1_500.gif" alt="Celebration GIF">
+  </div>
+  `;
+
+  oEl.innerHTML="";
+  mEl.textContent="Great job! Keep practicing 💪";
+}
+
 };
 
 render();
 </script>
 </body>
 </html>
+
